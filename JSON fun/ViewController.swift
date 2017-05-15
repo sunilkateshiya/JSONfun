@@ -12,13 +12,41 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        let url = URL(string: "http://api.fixer.io/latest")
+        let task = URLSession.shared.dataTask(with: url!) { (data, responce, error) in
+            if error != nil
+            {
+                print("ERROR")
+            }
+            else
+            {
+                if let contrnt = data
+                {
+                    do{
+                        let myJson = try JSONSerialization.jsonObject(with: contrnt, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                        if let rates = myJson["rates"] as?  NSDictionary
+                        {
+                            if let curruncy = rates["NOK"]
+                            {
+                                print(curruncy)
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        
+                    }
+                }
+            }
+        }
+        task.resume()
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+           }
 
 
 }
